@@ -3,3 +3,13 @@
 
 # Ignore Gradle build output directory
 build
+
+# Ignore bin/ folder 
+bin/
+
+# Ignore Eclipse settings
+.settings
+
+# Ignore files .* 
+.project
+.classpath
