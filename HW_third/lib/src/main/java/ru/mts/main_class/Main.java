@@ -7,6 +7,8 @@ public class Main{
 		
 		CreateAnimalServiceImpl service = new CreateAnimalServiceImpl();
 		service.createAnimals();
-		service.createAnimals(5);
+		service.createAnimals(-5);
+		
+		
 	}
 }

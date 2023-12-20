@@ -6,6 +6,9 @@ import java.math.RoundingMode;
 public class Shark extends Predator{
 	
 	public Shark(String breed, String name, BigDecimal cost, String character) {
+		if(cost.compareTo(BigDecimal.valueOf(0.0)) < 0) { //если цена отрицательна
+			throw new IllegalArgumentException("Некорректное значение цены животного");
+		}
 		this.breed = breed;
 		this.name = name;
 		this.cost = cost.setScale(2, RoundingMode.HALF_UP);
