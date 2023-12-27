@@ -18,16 +18,6 @@ public class Main {
 		CreateAnimalServiceImpl createService = new CreateAnimalServiceImpl();
 		AbstractAnimal[] animalsSecond = createService.createAnimals(10);
 
-		/* //вывод всех созданных животных
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		for(int i = 0; i < animalsSecond.length; i++ ){
-			animalsSecond[i].printAnimal();
-		}
-		System.out.println();
-		System.out.println();
-		 */
 
 		// создаем сервис для поиска животных
 		SearchServiceImpl searchService = new SearchServiceImpl();

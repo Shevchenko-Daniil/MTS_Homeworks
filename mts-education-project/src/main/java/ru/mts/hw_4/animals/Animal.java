@@ -27,5 +27,10 @@ public interface Animal{
 	 *
 	 */
 	public LocalDate getBirthDate();
+
+	/**
+	 * Выводит в консоль информацию о животном
+	 */
+	public void printAnimal();
 	
 }
