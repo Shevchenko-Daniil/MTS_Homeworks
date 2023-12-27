@@ -10,7 +10,6 @@ public interface CreateAnimalService {
 
     String[] animalNames = {"Барсик", "Кузя", "Лео", "Рекс", "Госпар", "Ромул"};  //список возможных имен
     String[] animalCharacters = {"Агресиввный", "Ласковый", "Вредный", "Прожорливый", "Мстительный", "Игривый"}; //список возможных характеров
-    String[] animalCase = {"Волк", "Акула", "Попугай", "Кот"}; //список возможных видов животных
     BigDecimal maxPrice = BigDecimal.valueOf(100.0); //максимальная цена за животное
 
     //метод для генерации случайного(и по виду тоже) животного
@@ -32,19 +31,20 @@ public interface CreateAnimalService {
         LocalDate birthDate = LocalDate.ofEpochDay(randomEpochDay); //рандомная дата
 
 
-        int caseIndex = (int) (Math.random() * animalCase.length); //выбираем рандомный вид животного
+        int caseIndex = (int) (Math.random() * AnimalsTypes.values().length); //выбираем рандомный вид животного
+        AnimalsTypes type = AnimalsTypes.values()[caseIndex];
 
-        switch (animalCase[caseIndex]) {
-            case "Волк":
+        switch (type) {
+            case WOLF:
                 animal = new Wolf("Тасманский сумчатый", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
                 break;
-            case "Акула":
+            case  SHARK:
                 animal = new Shark("Тигровая", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
                 break;
-            case "Попугай":
+            case PARROT:
                 animal = new Parrot("Венесуэльский амазон", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
                 break;
-            case "Кот":
+            case CAT:
                 animal = new Cat("Мейн-кун", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
                 break;
             default:

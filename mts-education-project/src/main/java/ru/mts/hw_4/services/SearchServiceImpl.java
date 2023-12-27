@@ -28,7 +28,6 @@ public class SearchServiceImpl implements SearchService {
         }
         return LeapYearNames.toArray(new String[0]);
     }
-
     public AbstractAnimal[] findOlderAnimal(AbstractAnimal[] animals, int minAge){
         checkingForNull(animals); //проверяем массив
         ArrayList<AbstractAnimal> olderAnimal = new ArrayList<AbstractAnimal>();  //создаем массив для животных
