@@ -5,6 +5,7 @@ import ru.mts.hw_4.animals.AbstractAnimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class SearchServiceImpl implements SearchService {
@@ -43,11 +44,11 @@ public class SearchServiceImpl implements SearchService {
     public void findDuplicate(AbstractAnimal[] animals){
         checkingForNull(animals); //проверяем массив
 
+        HashSet<AbstractAnimal> animalsSet = new HashSet<>();
+
         for(int i = 0; i < animals.length; i++){
-            for(int j = i+1; j < animals.length; j++){
-                if(animals[i].equals(animals[j])){
-                    animals[i].printAnimal();
-                }
+            if(!animalsSet.add(animals[i])){
+                animals[i].printAnimal();
             }
         }
     }

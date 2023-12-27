@@ -5,6 +5,7 @@ import ru.mts.hw_4.animals.*;
 import ru.mts.hw_4.services.SearchService;
 import ru.mts.hw_4.services.SearchServiceImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -16,13 +17,13 @@ public class Main {
 
 		//создаем сервис для создания животных
 		CreateAnimalServiceImpl createService = new CreateAnimalServiceImpl();
-		AbstractAnimal[] animalsSecond = createService.createAnimals(10);
+		AbstractAnimal[] animals = createService.createAnimals(10);
 
 
 		// создаем сервис для поиска животных
 		SearchServiceImpl searchService = new SearchServiceImpl();
 
-		String[] names = searchService.findLeapYearNames(animalsSecond);
+		String[] names = searchService.findLeapYearNames(animals);
 		System.out.println();
 		System.out.println("Имена животных, рожденных в високосный год:");
 		for(int i = 0; i < names.length; i++){
@@ -31,15 +32,16 @@ public class Main {
 		System.out.println();
 
 		int minAge = 10;
-		AbstractAnimal[] olderAnimals = searchService.findOlderAnimal(animalsSecond, minAge);
+		AbstractAnimal[] olderAnimals = searchService.findOlderAnimal(animals, minAge);
 		System.out.println("Животные, которые старше " + minAge + " лет:");
 		for (int i = 0; i<olderAnimals.length; i++){
 			olderAnimals[i].printAnimal();
 		}
 		System.out.println();System.out.println();
 
+
 		System.out.println("Животные-дубликаты в массиве:");
-		searchService.findDuplicate(animalsSecond);
+		searchService.findDuplicate(animals);
 
 		
 	}
