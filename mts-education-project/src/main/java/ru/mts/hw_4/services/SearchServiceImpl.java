@@ -21,7 +21,8 @@ public class SearchServiceImpl implements SearchService {
         ArrayList<String> LeapYearNames = new ArrayList<String>();  //создаем массив для имен
 
         for(int i =0; i < animals.length; i++){
-            if(animals[i].getBirthDate().getYear()%4 == 0){
+            if(animals[i].getBirthDate().getYear()%4 == 0 &&
+                    (animals[i].getBirthDate().getYear()%100 != 0 || animals[i].getBirthDate().getYear()%400 == 0)){
                 LeapYearNames.add(animals[i].getName()); //добавляем имя в массив
             }
         }
