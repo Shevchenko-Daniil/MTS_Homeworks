@@ -5,12 +5,6 @@ import ru.mts.hw_4.animals.*;
 import ru.mts.hw_4.services.SearchService;
 import ru.mts.hw_4.services.SearchServiceImpl;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 	public static void main(String[] args) {
