@@ -9,21 +9,13 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class SearchServiceImpl implements SearchService {
-    //метод проверяет элементы входного массива на null
-    private void checkingForNull(AbstractAnimal[] animals){
-        for(int i = 0; i < animals.length; i++){
-            if(Objects.isNull(animals[i])){
-                throw new IllegalArgumentException("В массиве присутствуют null объекты");
-            }
-        }
-    }
+
     public String[] findLeapYearNames(AbstractAnimal[] animals){
         checkingForNull(animals); //проверяем массив
         ArrayList<String> LeapYearNames = new ArrayList<String>();  //создаем массив для имен
 
         for(int i =0; i < animals.length; i++){
-            if(animals[i].getBirthDate().getYear()%4 == 0 &&
-                    (animals[i].getBirthDate().getYear()%100 != 0 || animals[i].getBirthDate().getYear()%400 == 0)){
+            if(checkLeapYear(animals[i].getBirthDate().getYear())){
                 LeapYearNames.add(animals[i].getName()); //добавляем имя в массив
             }
         }
@@ -51,5 +43,19 @@ public class SearchServiceImpl implements SearchService {
                 animals[i].printAnimal();
             }
         }
+    }
+
+    //метод проверяет элементы входного массива на null
+    private void checkingForNull(AbstractAnimal[] animals){
+        for(int i = 0; i < animals.length; i++){
+            if(Objects.isNull(animals[i])){
+                throw new IllegalArgumentException("В массиве присутствуют null объекты");
+            }
+        }
+    }
+
+    //метод проверяет год на високосность
+    private boolean checkLeapYear(int year){
+        return year % 4 == 0 && year % 100 != 0 || year % 400 == 0;
     }
 }

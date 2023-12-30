@@ -61,22 +61,22 @@ public interface CreateAnimalService {
         return animals;
 
     }
-
+    //генерирует случайное имя
     private String generateRandomName(){
         int nameIndex = (int) (Math.random() * AnimalName.values().length);
         return AnimalName.values()[nameIndex].getTitle();
     }
-
+    //генерирует случайный характер
     private String generateRandomCharacter(){
         int characterIndex = (int) (Math.random() * AnimalCharacter.values().length);
         return AnimalCharacter.values()[characterIndex].getTitle();
     }
-
+    //генерирует случайную стоимость (вплоть до максимальной цены)
     private BigDecimal generateRandomCost(){
         BigDecimal maxPrice = BigDecimal.valueOf(100.0); //максимальная цена за животное
         return maxPrice.multiply(BigDecimal.valueOf(Math.random())); //выбираем рандомную цену
     }
-
+    //генерирует случайную дату рождения
     private LocalDate generateRandomDate(){
         LocalDate startDate = LocalDate.of(2000, 1, 1); //начальная дата
         long start = startDate.toEpochDay();
@@ -87,7 +87,7 @@ public interface CreateAnimalService {
         long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
         return LocalDate.ofEpochDay(randomEpochDay);
     }
-
+    //генерирует случайный тип животного
     private AnimalsTypes generateRandomType(){
         int caseIndex = (int) (Math.random() * AnimalsTypes.values().length);
         return AnimalsTypes.values()[caseIndex];
