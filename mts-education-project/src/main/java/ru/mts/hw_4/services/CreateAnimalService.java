@@ -8,44 +8,29 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public interface CreateAnimalService {
 
-    String[] animalNames = {"Барсик", "Кузя", "Лео", "Рекс", "Госпар", "Ромул"};  //список возможных имен
-    String[] animalCharacters = {"Агресиввный", "Ласковый", "Вредный", "Прожорливый", "Мстительный", "Игривый"}; //список возможных характеров
-    BigDecimal maxPrice = BigDecimal.valueOf(100.0); //максимальная цена за животное
-
     //метод для генерации случайного(и по виду тоже) животного
     default AbstractAnimal createRandomAnimal() {
         AbstractAnimal animal;
 
-        int nameIndex = (int) (Math.random() * animalNames.length);     //выбираем рандомное имя
-        int characterIndex = (int) (Math.random() * animalCharacters.length); //выбираем рандомный характер
-        BigDecimal cost = maxPrice.multiply(BigDecimal.valueOf(Math.random())); //выбираем рандомную цену
+        String name = generateRandomName();
+        BigDecimal cost = generateRandomCost();
+        String character = generateRandomCharacter();
+        LocalDate birthDate = generateRandomDate();
+        AnimalsTypes type = generateRandomType();
 
-        //генерируем рандомную дату рождения
-        LocalDate startDate = LocalDate.of(2000, 1, 1); //начальная дата
-        long start = startDate.toEpochDay();
-
-        LocalDate endDate = LocalDate.now(); //конечная дата
-        long end = endDate.toEpochDay();
-
-        long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
-        LocalDate birthDate = LocalDate.ofEpochDay(randomEpochDay); //рандомная дата
-
-
-        int caseIndex = (int) (Math.random() * AnimalsTypes.values().length); //выбираем рандомный вид животного
-        AnimalsTypes type = AnimalsTypes.values()[caseIndex];
 
         switch (type) {
             case WOLF:
-                animal = new Wolf("Тасманский сумчатый", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
+                animal = new Wolf("Тасманский сумчатый", name, cost, character, birthDate);
                 break;
             case  SHARK:
-                animal = new Shark("Тигровая", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
+                animal = new Shark("Тигровая", name, cost, character, birthDate);
                 break;
             case PARROT:
-                animal = new Parrot("Венесуэльский амазон", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
+                animal = new Parrot("Венесуэльский амазон",name, cost, character, birthDate);
                 break;
             case CAT:
-                animal = new Cat("Мейн-кун", animalNames[nameIndex], cost, animalCharacters[characterIndex], birthDate);
+                animal = new Cat("Мейн-кун", name, cost, character, birthDate);
                 break;
             default:
                 animal = null;
@@ -75,5 +60,36 @@ public interface CreateAnimalService {
         }
         return animals;
 
+    }
+
+    private String generateRandomName(){
+        int nameIndex = (int) (Math.random() * AnimalName.values().length);
+        return AnimalName.values()[nameIndex].getTitle();
+    }
+
+    private String generateRandomCharacter(){
+        int characterIndex = (int) (Math.random() * AnimalCharacter.values().length);
+        return AnimalCharacter.values()[characterIndex].getTitle();
+    }
+
+    private BigDecimal generateRandomCost(){
+        BigDecimal maxPrice = BigDecimal.valueOf(100.0); //максимальная цена за животное
+        return maxPrice.multiply(BigDecimal.valueOf(Math.random())); //выбираем рандомную цену
+    }
+
+    private LocalDate generateRandomDate(){
+        LocalDate startDate = LocalDate.of(2000, 1, 1); //начальная дата
+        long start = startDate.toEpochDay();
+
+        LocalDate endDate = LocalDate.now(); //конечная дата
+        long end = endDate.toEpochDay();
+
+        long randomEpochDay = ThreadLocalRandom.current().longs(start, end).findAny().getAsLong();
+        return LocalDate.ofEpochDay(randomEpochDay);
+    }
+
+    private AnimalsTypes generateRandomType(){
+        int caseIndex = (int) (Math.random() * AnimalsTypes.values().length);
+        return AnimalsTypes.values()[caseIndex];
     }
 }
