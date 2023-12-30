@@ -5,6 +5,9 @@ import ru.mts.hw_4.animals.*;
 import ru.mts.hw_4.services.SearchService;
 import ru.mts.hw_4.services.SearchServiceImpl;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 
 public class Main {
 	public static void main(String[] args) {
@@ -17,6 +20,8 @@ public class Main {
 		// создаем сервис для поиска животных
 		SearchServiceImpl searchService = new SearchServiceImpl();
 
+
+		//ищем животных, рожденных в високосный год
 		String[] names = searchService.findLeapYearNames(animals);
 		System.out.println();
 		System.out.println("Имена животных, рожденных в високосный год:");
@@ -25,8 +30,11 @@ public class Main {
 		}
 		System.out.println();
 
+
+		//ищем животных старше 10 лет
 		int minAge = 10;
 		AbstractAnimal[] olderAnimals = searchService.findOlderAnimal(animals, minAge);
+
 		System.out.println("Животные, которые старше " + minAge + " лет:");
 		for (int i = 0; i<olderAnimals.length; i++){
 			olderAnimals[i].printAnimal();
@@ -34,8 +42,18 @@ public class Main {
 		System.out.println();System.out.println();
 
 
+		//проверяем корректность работы поиска дубликатов
+		Wolf[] wolfs = new Wolf[5];
+		BigDecimal cost = BigDecimal.valueOf(10.0);
+		LocalDate birthDate = LocalDate.of(2016, 10, 20);
+		wolfs[0] = new Wolf("Обычный", "1", cost, "Агрессивный", birthDate);
+		wolfs[1] = new Wolf("Обычный", "2", cost, "Агрессивный", birthDate);
+		wolfs[2] = new Wolf("Обычный", "2", cost, "Агрессивный", birthDate);
+		wolfs[3] = new Wolf("Обычный", "2", cost, "Агрессивный", birthDate);
+		wolfs[4] = new Wolf("Обычный", "2", cost, "Агрессивный", birthDate);
+
 		System.out.println("Животные-дубликаты в массиве:");
-		searchService.findDuplicate(animals);
+		searchService.findDuplicate(wolfs);
 
 		
 	}

@@ -25,8 +25,11 @@ public class SearchServiceImpl implements SearchService {
         checkingForNull(animals); //проверяем массив
         ArrayList<AbstractAnimal> olderAnimal = new ArrayList<AbstractAnimal>();  //создаем массив для животных
 
+        long nowDateEpoch = LocalDate.now().toEpochDay();
+
         for(int i = 0; i < animals.length; i++){
-            if(Period.between(animals[i].getBirthDate(), LocalDate.now()).getYears() > minAge){
+            long birthDateEpoch = animals[i].getBirthDate().plusYears(minAge).toEpochDay(); //прбавляем к дате орождения minAge
+            if(birthDateEpoch < nowDateEpoch){
                 olderAnimal.add(animals[i]); //добавляем животное в массив
             }
         }
