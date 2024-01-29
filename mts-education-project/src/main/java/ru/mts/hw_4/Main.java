@@ -53,7 +53,7 @@ public class Main {
 		wolfs[4] = new Wolf("Обычный", "2", cost, "Агрессивный", birthDate);
 
 		System.out.println("Животные-дубликаты в массиве:");
-		searchService.findDuplicate(wolfs);
+		searchService.printDuplicate(wolfs);
 
 		
 	}

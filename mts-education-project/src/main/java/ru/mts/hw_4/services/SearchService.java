@@ -22,7 +22,13 @@ public interface SearchService {
 
     /**
      * @param animals - входной массив животных
-     * Метод выводит на экран дубликаты животных в массиве animals
+     * @return Возвращает массив животных-дубликатов
      */
-    void findDuplicate(AbstractAnimal[] animals);
+    AbstractAnimal[] findDuplicate(AbstractAnimal[] animals);
+
+    /**
+     * @param animals - входной массив животных
+     * Выводит массив животных-дубликатов в масииве animals
+     */
+    void printDuplicate(AbstractAnimal[] animals);
 }
