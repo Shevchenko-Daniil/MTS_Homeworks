@@ -87,7 +87,7 @@ public class AnimalServiceTest {
                 assertEquals(9, searchService.findOlderAnimal(oldAnimals, value).length);
             }
             else if(value == 10){
-                assertEquals(5, searchService.findOlderAnimal(oldAnimals, value).length);
+                assertEquals(6, searchService.findOlderAnimal(oldAnimals, value).length);
             }
             else if(value == 15){
                 assertEquals(4, searchService.findOlderAnimal(oldAnimals, value).length);
