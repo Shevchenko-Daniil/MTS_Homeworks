@@ -6,14 +6,17 @@ import ru.mts.hw_6.animals.AbstractAnimal;
 import ru.mts.hw_6.services.CreateAnimalService;
 
 
+
 @Component
 @Scope(value = "prototype")
 public class CreateAnimalServiceImpl implements CreateAnimalService {
 
-    //public AnimalsTypes type;
+    @InjectAnimalType
+    private AnimalsTypes type;
 
 
-	/**
+
+    /**
 	 * @return Массив numOfAnimals случайных животных
 	 */
     public AbstractAnimal[] createAnimals(int numOfAnimals) {
@@ -33,7 +36,6 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
 
                 animals[count] = createRandomAnimal();
 
-                animals[count].printAnimal();
 
             }
 			return animals;
@@ -62,6 +64,11 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
         }
         while (count < 10);
 		return animals;
+    }
+
+    private AnimalsTypes generateRandomType(){
+        int caseIndex = (int) (Math.random() * AnimalsTypes.values().length);
+        return AnimalsTypes.values()[caseIndex];
     }
 
 }

@@ -2,6 +2,7 @@ package ru.mts.hw_6.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import ru.mts.hw_6.services.AnimalsRepository;
 import ru.mts.hw_6.services.AnimalsRepositoryImpl;
 import ru.mts.hw_6.services.CreateAnimalService;

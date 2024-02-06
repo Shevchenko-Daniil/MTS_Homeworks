@@ -1,5 +1,6 @@
 package ru.mts.hw_6.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.mts.hw_6.animals.AbstractAnimal;
 import ru.mts.hw_6.animals.Cat;
@@ -11,17 +12,18 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
-@Service
+
 public class AnimalsRepositoryImpl implements AnimalsRepository{
     private AbstractAnimal[] animals;
+    @Autowired
     private CreateAnimalServiceImpl createAnimalService;
 
     @PostConstruct
     public void init(){
         System.out.println("ВЫЗВАЛ!");
-        //animals = createAnimalService.createAnimals(2);
-        animals = new AbstractAnimal[1];
-        animals[0] = new Cat("1", "1", BigDecimal.valueOf(100.0), "1", LocalDate.now().minusYears(24));
+        animals = createAnimalService.createAnimals(10);
+        //animals = new AbstractAnimal[1];
+        //animals[0] = new Cat("1", "1", BigDecimal.valueOf(100.0), "1", LocalDate.now().minusYears(24));
     }
 
     public String[] findLeapYearNames(){

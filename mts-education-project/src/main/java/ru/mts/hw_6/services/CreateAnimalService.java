@@ -62,7 +62,6 @@ public interface CreateAnimalService {
 
             animals[count] = createRandomAnimal();
 
-            animals[count].printAnimal();
 
             count++;
         }
@@ -96,7 +95,7 @@ public interface CreateAnimalService {
         return LocalDate.ofEpochDay(randomEpochDay);
     }
     //генерирует случайный тип животного
-    private AnimalsTypes generateRandomType(){
+    static AnimalsTypes generateRandomType(){
         int caseIndex = (int) (Math.random() * AnimalsTypes.values().length);
         return AnimalsTypes.values()[caseIndex];
     }

@@ -3,7 +3,7 @@ package ru.mts.hw_6.services;
 import org.springframework.stereotype.Service;
 import ru.mts.hw_6.animals.AbstractAnimal;
 
-@Service
+
 public interface AnimalsRepository {
 
     /**
