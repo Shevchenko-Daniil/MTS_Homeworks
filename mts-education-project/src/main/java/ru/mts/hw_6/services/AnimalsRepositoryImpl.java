@@ -1,12 +1,9 @@
 package ru.mts.hw_6.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ru.mts.hw_6.animals.AbstractAnimal;
-import ru.mts.hw_6.animals.Cat;
 
 import javax.annotation.PostConstruct;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -3,7 +3,7 @@ package ru.mts.hw_6.services;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.mts.hw_6.animals.AbstractAnimal;
-import ru.mts.hw_6.services.CreateAnimalService;
+
 
 
 

@@ -3,9 +3,7 @@ package ru.mts.hw_6.services;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.mts.hw_6.animals.*;
-import ru.mts.hw_6.services.AnimalCharacter;
-import ru.mts.hw_6.services.AnimalName;
-import ru.mts.hw_6.services.AnimalsTypes;
+
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
