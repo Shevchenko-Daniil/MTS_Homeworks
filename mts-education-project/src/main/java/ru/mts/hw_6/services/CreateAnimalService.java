@@ -1,14 +1,12 @@
 package ru.mts.hw_6.services;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import ru.mts.hw_6.animals.*;
 
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
-
 
 @Scope(value = "prototype")
 public interface CreateAnimalService {

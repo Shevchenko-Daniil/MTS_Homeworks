@@ -1,4 +1,4 @@
-package ru.mts.hw_6.services;
+package ru.mts.hw_6.animals;
 
 public enum AnimalName {
     BARSIK ("Барсик"),

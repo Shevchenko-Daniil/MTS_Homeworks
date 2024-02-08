@@ -2,7 +2,6 @@ package ru.mts.hw_6.services;
 
 import ru.mts.hw_6.animals.AbstractAnimal;
 
-
 public interface AnimalsRepository {
 
     /**

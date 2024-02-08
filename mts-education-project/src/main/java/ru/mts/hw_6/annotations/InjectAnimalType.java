@@ -1,4 +1,4 @@
-package ru.mts.hw_6.services;
+package ru.mts.hw_6.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -2,8 +2,6 @@ package ru.mts.hw_6.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.mts.hw_6.services.AnimalsRepository;
-import ru.mts.hw_6.services.AnimalsRepositoryImpl;
 import ru.mts.hw_6.services.CreateAnimalService;
 import ru.mts.hw_6.services.CreateAnimalServiceImpl;
 
@@ -14,8 +12,5 @@ public class ConfigurationApp {
         return new CreateAnimalServiceImpl();
     }
 
-    @Bean
-    public AnimalsRepository animalsRepository() {
-        return new AnimalsRepositoryImpl();
-    }
+
 }

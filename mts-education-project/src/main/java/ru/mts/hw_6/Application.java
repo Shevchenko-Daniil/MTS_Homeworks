@@ -27,13 +27,20 @@ public class Application {
             oldAnimals[i].printAnimal();
         }
 
-        //метод findDuplicate
+        //метод printDuplicate
         System.out.println();
-        System.out.println("Метод findDuplicate");
+        System.out.println("Метод printDuplicate");
         bean.printDuplicate();
 
         context.close();
 
+        //метод findDuplicate
+        System.out.println();
+        System.out.println("Метод findDuplicate");
+        AbstractAnimal[] duplicateAnimals = bean.findDuplicate();
+        for(int i = 0; i< duplicateAnimals.length; i++){
+            duplicateAnimals[i].printAnimal();
+        }
 
 
 

@@ -1,11 +1,8 @@
 package ru.mts.hw_6.services;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import ru.mts.hw_6.animals.AbstractAnimal;
-
-
-
+import ru.mts.hw_6.animals.*;
+import ru.mts.hw_6.annotations.InjectAnimalType;
 
 
 @Scope(value = "prototype")
@@ -13,8 +10,6 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
 
     @InjectAnimalType
     private AnimalsTypes type;
-
-
 
     /**
 	 * @return Массив numOfAnimals случайных животных

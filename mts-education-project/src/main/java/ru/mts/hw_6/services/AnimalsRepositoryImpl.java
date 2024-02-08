@@ -1,6 +1,7 @@
 package ru.mts.hw_6.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.mts.hw_6.animals.AbstractAnimal;
 
 import javax.annotation.PostConstruct;
@@ -9,20 +10,18 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 
-
+@Repository
 public class AnimalsRepositoryImpl implements AnimalsRepository{
     private AbstractAnimal[] animals;
     @Autowired
-    private CreateAnimalServiceImpl createAnimalService;
+    private CreateAnimalService createAnimalService;
 
     @PostConstruct
     public void init(){
-        System.out.println("ВЫЗВАЛ!");
-        animals = createAnimalService.createAnimals(10);
-        //animals = new AbstractAnimal[1];
-        //animals[0] = new Cat("1", "1", BigDecimal.valueOf(100.0), "1", LocalDate.now().minusYears(24));
+        animals = createAnimalService.createAnimals();
     }
 
+    @Override
     public String[] findLeapYearNames(){
         checkingForNull(animals); //проверяем массив
         ArrayList<String> LeapYearNames = new ArrayList<String>();  //создаем массив для имен
@@ -35,6 +34,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository{
         return LeapYearNames.toArray(new String[0]);
     }
 
+    @Override
     public AbstractAnimal[] findOlderAnimal(int minAge){
         checkingForNull(animals); //проверяем массив
         ArrayList<AbstractAnimal> olderAnimal = new ArrayList<AbstractAnimal>();  //создаем массив для животных
@@ -55,6 +55,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository{
     }
 
 
+    @Override
     public AbstractAnimal[] findDuplicate(){
         checkingForNull(animals); //проверяем массив
         ArrayList<AbstractAnimal> duplicateAnimal = new ArrayList<AbstractAnimal>();  //создаем массив для дубликатов
@@ -70,6 +71,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository{
         return duplicateAnimal.toArray(new AbstractAnimal[0]);
     }
 
+    @Override
     public void printDuplicate(){
         AbstractAnimal[] duplicateAnimal = this.findDuplicate();
 

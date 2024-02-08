@@ -5,7 +5,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.ReflectionUtils;
 import ru.mts.hw_6.services.CreateAnimalService;
-import ru.mts.hw_6.services.InjectAnimalType;
+import ru.mts.hw_6.annotations.InjectAnimalType;
 
 import java.lang.reflect.Field;
 
