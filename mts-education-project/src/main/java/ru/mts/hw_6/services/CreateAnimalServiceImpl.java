@@ -7,7 +7,7 @@ import ru.mts.hw_6.animals.AbstractAnimal;
 
 
 
-@Component
+
 @Scope(value = "prototype")
 public class CreateAnimalServiceImpl implements CreateAnimalService {
 
