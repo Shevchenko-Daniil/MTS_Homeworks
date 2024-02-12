@@ -1,2 +1,3 @@
 rootProject.name = 'mts-education-project'
+include 'mts-project-starter'
 
