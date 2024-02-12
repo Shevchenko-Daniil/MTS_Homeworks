@@ -2,8 +2,6 @@ package ru.mts.hw_7.animals;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @ConfigurationProperties(prefix = "application.animal")
 public class AnimalProperties {

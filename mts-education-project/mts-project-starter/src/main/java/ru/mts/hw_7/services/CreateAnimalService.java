@@ -1,9 +1,7 @@
 package ru.mts.hw_7.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import ru.mts.hw_7.animals.*;
-import ru.mts.hw_7.config.AnimalConfig;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
