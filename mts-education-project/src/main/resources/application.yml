@@ -1,0 +1,5 @@
+application:
+  animal:
+    names: Барсик, Кузя, Лео, Рекс, Госпар, Ромул
+  scheduler:
+    timeRate: 60000

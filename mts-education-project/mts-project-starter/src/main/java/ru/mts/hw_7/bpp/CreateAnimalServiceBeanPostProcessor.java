@@ -22,6 +22,7 @@ public class CreateAnimalServiceBeanPostProcessor implements BeanPostProcessor {
             if(annotation != null){
                 field.setAccessible(true);
                 ReflectionUtils.setField(field, bean, CreateAnimalService.generateRandomType());
+                field.setAccessible(false);
             }
         }
 
