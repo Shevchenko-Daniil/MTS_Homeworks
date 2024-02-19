@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  ru.mts.hw_7.config.AnimalAutoConfiguration, ru.mts.hw_7.config.ConfigurationApp
