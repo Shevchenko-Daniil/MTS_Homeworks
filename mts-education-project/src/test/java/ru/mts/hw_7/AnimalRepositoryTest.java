@@ -6,7 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import ru.mts.hw_7.animals.*;
 import ru.mts.hw_7.services.AnimalsRepositoryImpl;
 
@@ -17,14 +20,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = AnimalRepositoryTestConfiguration.class)
+@Profile("test")
 public class AnimalRepositoryTest {
     @Autowired
     AnimalsRepositoryImpl animalsRepository;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+
     AbstractAnimal[] animals;
     AbstractAnimal[] oldAnimals;
-    /*@Autowired
-    String[] animalsNames;*/
+//    @Value("${application-test.animal.names}")
+  //  String[] animalsNames;
 
     @BeforeEach
     public void beforeEach() {
