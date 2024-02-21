@@ -15,30 +15,21 @@ import ru.mts.hw_7.services.ScheduledService;
 import java.util.Arrays;
 
 @TestConfiguration
-@Profile("test")
+//@Profile("test")
 //@TestPropertySource(locations = "mts-education-project/src/test/resources/application-test.yml")
 //@ConfigurationProperties(prefix = "application-test.animal")
 public class AnimalRepositoryTestConfiguration {
 
-    @Value("${application-test.animal.names}")
+  /*  @Value("${application-test.animal.names}")
     private String[] names;
     @Bean
     public String[] animalsNames(){
         return names;
-    }
+    }*/
     @Bean
     @Primary
     public AnimalsRepositoryImpl animalRepository(){
         return new AnimalsRepositoryImpl();
     }
 
-    @Bean
-    public CommandLineRunner run(ApplicationContext appContext) {
-        return args -> {
-
-            String[] beans = appContext.getBeanDefinitionNames();
-            Arrays.stream(beans).sorted().forEach(System.out::println);
-
-        };
-    }
 }

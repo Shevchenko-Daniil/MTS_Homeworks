@@ -2,14 +2,14 @@ package ru.mts.hw_7;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Profile;
+import org.springframework.test.context.ActiveProfiles;
 import ru.mts.hw_7.animals.*;
 import ru.mts.hw_7.services.AnimalsRepositoryImpl;
 
@@ -20,18 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = AnimalRepositoryTestConfiguration.class)
-@Profile("test")
+@ActiveProfiles("test")
 public class AnimalRepositoryTest {
     @Autowired
     AnimalsRepositoryImpl animalsRepository;
-
-    @Autowired
-    private ApplicationContext applicationContext;
-
     AbstractAnimal[] animals;
     AbstractAnimal[] oldAnimals;
-//    @Value("${application-test.animal.names}")
-  //  String[] animalsNames;
+    @Value("${application-test.animal.names}")
+    String[] animalsNames;
 
     @BeforeEach
     public void beforeEach() {
@@ -60,71 +56,78 @@ public class AnimalRepositoryTest {
 
     }
 
-    @Test
-    public void findLeapYearNamesTest(){
-        AbstractAnimal[] leapYearAnimals = new AbstractAnimal[5];
-        String[] animalsNames = {"Барсик", "Кузя", "Лео", "Рекс", "Госпар", "Ромул"};
-        BigDecimal cost = BigDecimal.valueOf(100.0);
+    @Nested
+    @DisplayName("Tests for positive outcomes")
+    public class PositiveOutcomes {
+        @Test
+        @DisplayName("Test for findLeapYearNames method")
+        public void findLeapYearNamesTest() {
+            AbstractAnimal[] leapYearAnimals = new AbstractAnimal[5];
+            BigDecimal cost = BigDecimal.valueOf(100.0);
 
-        leapYearAnimals[0] = new Cat("1", animalsNames[0], cost, "11", LocalDate.of(2020, 3, 15));
-        leapYearAnimals[1] = new Wolf("1", animalsNames[1], cost, "11", LocalDate.of(2019, 3, 15));
-        leapYearAnimals[2] = new Parrot("1", animalsNames[2], cost, "11", LocalDate.of(2000, 3, 15));
-        leapYearAnimals[3] = new Shark("1", animalsNames[3], cost, "11", LocalDate.of(2002, 3, 15));
-        leapYearAnimals[4] = new Cat("1", animalsNames[4], cost, "11", LocalDate.of(2004, 3, 15));
+            leapYearAnimals[0] = new Cat("1", animalsNames[0], cost, "11", LocalDate.of(2020, 3, 15));
+            leapYearAnimals[1] = new Wolf("1", animalsNames[1], cost, "11", LocalDate.of(2019, 3, 15));
+            leapYearAnimals[2] = new Parrot("1", animalsNames[2], cost, "11", LocalDate.of(2000, 3, 15));
+            leapYearAnimals[3] = new Shark("1", animalsNames[3], cost, "11", LocalDate.of(2002, 3, 15));
+            leapYearAnimals[4] = new Cat("1", animalsNames[4], cost, "11", LocalDate.of(2004, 3, 15));
 
-        animalsRepository.setAnimals(leapYearAnimals);
-        String[] leapYearNames = animalsRepository.findLeapYearNames();
+            animalsRepository.setAnimals(leapYearAnimals);
+            String[] leapYearNames = animalsRepository.findLeapYearNames();
 
-        assertEquals(leapYearNames.length, 3);
+            assertEquals(leapYearNames.length, 3);
 
 
-    }
-
-    @Test
-    public void findDuplicateTest(){
-
-        animalsRepository.setAnimals(animals);
-        AbstractAnimal[] duplicateAnimal =  animalsRepository.findDuplicate();
-        assertEquals(3, duplicateAnimal.length);
-    }
-
-    @ParameterizedTest(name = "Test for animals over {arguments} years old")
-    @ValueSource(ints = {5, 10, 15}) //разные значения количества лет
-    @DisplayName("Test for animal's age")
-    public void findOlderAnimalTest(int value){
-
-        animalsRepository.setAnimals(oldAnimals);
-        //проверка положительных исходов
-        if(value == 5){
-            assertEquals(6, animalsRepository.findOlderAnimal(value).length);
         }
-        else if(value == 10){
-            assertEquals(3, animalsRepository.findOlderAnimal(value).length);
+
+        @Test
+        @DisplayName("Test for findDuplicate method")
+        public void findDuplicateTest() {
+
+            animalsRepository.setAnimals(animals);
+            AbstractAnimal[] duplicateAnimal = animalsRepository.findDuplicate();
+            assertEquals(3, duplicateAnimal.length);
         }
-        else if(value == 15){
-            assertEquals(2, animalsRepository.findOlderAnimal(value).length);
+
+        @ParameterizedTest(name = "Test for animals over {arguments} years old")
+        @ValueSource(ints = {5, 10, 15}) //разные значения количества лет
+        @DisplayName("Test for animal's age")
+        public void findOlderAnimalTest(int value) {
+
+            animalsRepository.setAnimals(oldAnimals);
+            //проверка положительных исходов
+            if (value == 5) {
+                assertEquals(6, animalsRepository.findOlderAnimal(value).length);
+            } else if (value == 10) {
+                assertEquals(3, animalsRepository.findOlderAnimal(value).length);
+            } else if (value == 15) {
+                assertEquals(2, animalsRepository.findOlderAnimal(value).length);
+            }
         }
     }
 
-    @Test
-    @DisplayName("Test for illegal argument in method findOlderAnimal")
-    public void findOlderIllegalArgTest(){
-        int minAge = -3;
-        Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
-        assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(minAge));
-    }
 
-    @Test
-    @DisplayName("Test for null check")
-    public void nullCheck(){
-        AbstractAnimal[] animals = new AbstractAnimal[1];
-        animals[0] = null;
+    @Nested
+    public class NegativeOutcomes {
+        @Test
+        @DisplayName("Test for illegal argument in method findOlderAnimal")
+        public void findOlderIllegalArgTest() {
+            int minAge = -3;
+            Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
+            assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(minAge));
+        }
 
-        animalsRepository.setAnimals(animals);
+        @Test
+        @DisplayName("Test for null check")
+        public void nullCheck() {
+            AbstractAnimal[] animals = new AbstractAnimal[1];
+            animals[0] = null;
 
-        Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
-        assertThrows(exceptionClass, () -> animalsRepository.findDuplicate());
-        assertThrows(exceptionClass, () -> animalsRepository.findLeapYearNames());
-        assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(5));
+            animalsRepository.setAnimals(animals);
+
+            Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
+            assertThrows(exceptionClass, () -> animalsRepository.findDuplicate());
+            assertThrows(exceptionClass, () -> animalsRepository.findLeapYearNames());
+            assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(5));
+        }
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import ru.mts.hw_7.animals.AbstractAnimal;
 import ru.mts.hw_7.animals.Cat;
 import ru.mts.hw_7.animals.Wolf;
+import ru.mts.hw_7.config.AnimalAutoConfiguration;
 import ru.mts.hw_7.services.CreateAnimalServiceImpl;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@SpringBootTest(classes = StarterTestConfiguration.class)
+@SpringBootTest(classes = {StarterTestConfiguration.class, AnimalAutoConfiguration.class})
 public class StarterTest {
     @Autowired
     private CreateAnimalServiceImpl createAnimalService;
