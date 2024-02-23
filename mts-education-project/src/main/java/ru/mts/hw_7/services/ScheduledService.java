@@ -2,7 +2,6 @@ package ru.mts.hw_7.services;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.mts.hw_7.animals.AbstractAnimal;
