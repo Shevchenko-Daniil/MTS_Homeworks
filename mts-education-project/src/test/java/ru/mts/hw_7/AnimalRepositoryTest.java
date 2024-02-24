@@ -1,21 +1,23 @@
 package ru.mts.hw_7;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.util.ReflectionTestUtils;
 import ru.mts.hw_7.animals.*;
 import ru.mts.hw_7.config.AnimalAutoConfiguration;
 import ru.mts.hw_7.config.ConfigurationApp;
 import ru.mts.hw_7.services.AnimalsRepositoryImpl;
 
+import java.beans.FeatureDescriptor;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -23,8 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest(classes = {AnimalRepositoryTestConfiguration.class, AnimalAutoConfiguration.class, ConfigurationApp.class})
+@ActiveProfiles("test")
 public class AnimalRepositoryTest {
-   @Autowired
+    @Autowired
     @Qualifier("LeapYearRepo")
     AnimalsRepositoryImpl leapYearAnimalsRepository;
 
@@ -36,14 +39,62 @@ public class AnimalRepositoryTest {
     @Qualifier("AnimalsRepo")
     AnimalsRepositoryImpl animalsRepository;
 
+    @Value("${application-test.animal.names}")
+    String[] animalsNames;
+
     AbstractAnimal[] animals;
     AbstractAnimal[] oldAnimals;
+    AbstractAnimal[] leapYearAnimals;
 
+    @Autowired
+    private ApplicationContext applicationContext;
+    @BeforeEach
+    public void setOldAnimalsRepository(){
+        oldAnimals = new AbstractAnimal[8];
+        BigDecimal cost = BigDecimal.valueOf(100.0);
 
-    //просто для проверки поднятия контекста
-    @Test
-    public void test(){
-        System.out.println();
+        oldAnimals[0] = new Cat("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(24));
+        oldAnimals[1] = new Cat("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(4));
+        oldAnimals[2] = new Cat("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(5));
+        oldAnimals[3] = new Parrot("2", "Кузя", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(8));
+        oldAnimals[4] = new Parrot("2", "Кузя", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(10).minusDays(1));
+        oldAnimals[5] = new Shark("3", "Ромул", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(10).plusDays(1));
+        oldAnimals[6] = new Shark("3", "Ромул", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(9).minusMonths(2));
+        oldAnimals[7] = new Wolf("4", "Рекс", BigDecimal.valueOf(100.0), "11", LocalDate.now().minusYears(20));
+
+        ReflectionTestUtils.setField(oldAnimalsRepository, "animals", oldAnimals);
+    }
+    @BeforeEach
+    public void setLeapYearAnimalsRepository(){
+        leapYearAnimals = new AbstractAnimal[5];
+        BigDecimal cost = BigDecimal.valueOf(100.0);
+
+        leapYearAnimals[0] = new Cat("1", animalsNames[0], cost, "11", LocalDate.of(2020, 3, 15));
+        leapYearAnimals[1] = new Wolf("1", animalsNames[1], cost, "11", LocalDate.of(2019, 3, 15));
+        leapYearAnimals[2] = new Parrot("1", animalsNames[2], cost, "11", LocalDate.of(2000, 3, 15));
+        leapYearAnimals[3] = new Shark("1", animalsNames[3], cost, "11", LocalDate.of(2002, 3, 15));
+        leapYearAnimals[4] = new Cat("1", animalsNames[4], cost, "11", LocalDate.of(2004, 3, 15));
+
+        ReflectionTestUtils.setField(leapYearAnimalsRepository, "animals", leapYearAnimals);
+    }
+    @BeforeEach
+    public void setAnimalsRepository(){
+        animals = new AbstractAnimal[10];
+
+        BigDecimal cost = BigDecimal.valueOf(100.0);
+
+        animals[0] = new Cat("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.of(2020, 3, 15));
+        animals[1] = new Cat("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.of(2020, 3, 15));
+        animals[2] = new Cat("1", "Госпар", BigDecimal.valueOf(10.0), "11", LocalDate.of(2000, 3, 15));
+        animals[3] = new Wolf("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.of(2020, 3, 15));
+        animals[4] = new Cat("1", "Кузя", BigDecimal.valueOf(100.0), "11", LocalDate.of(1900, 3, 15));
+        animals[5] = new Parrot("2", "Ромул", BigDecimal.valueOf(100.0), "11", LocalDate.of(2022, 3, 15));
+        animals[6] = new Parrot("2", "Рекс", BigDecimal.valueOf(100.0), "11", LocalDate.of(1904, 3, 15));
+        animals[7] = new Shark("3", "Ромул", BigDecimal.valueOf(100.0), "11", LocalDate.of(2016, 3, 15));
+        animals[8] = new Wolf("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.of(2020, 3, 15));
+        animals[9] = new Parrot("2", "Рекс", BigDecimal.valueOf(100.0), "11", LocalDate.of(1904, 3, 15));
+
+        ReflectionTestUtils.setField(animalsRepository, "animals", animals);
     }
 
     @Nested
