@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 import ru.mts.hw_7.animals.*;
@@ -16,8 +15,6 @@ import ru.mts.hw_7.config.AnimalAutoConfiguration;
 import ru.mts.hw_7.config.ConfigurationApp;
 import ru.mts.hw_7.services.AnimalsRepositoryImpl;
 
-import java.beans.FeatureDescriptor;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -48,6 +45,7 @@ public class AnimalRepositoryTest {
 
     @Autowired
     private ApplicationContext applicationContext;
+
     @BeforeEach
     public void setOldAnimalsRepository(){
         oldAnimals = new AbstractAnimal[8];
