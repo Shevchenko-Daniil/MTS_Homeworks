@@ -3,8 +3,7 @@ package ru.mts.hw_7.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.mts.hw_7.animals.AbstractAnimal;
-import ru.mts.hw_7.services.AnimalsRepository;
-import ru.mts.hw_7.services.CreateAnimalService;
+
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
