@@ -82,10 +82,6 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         }
     }
 
-    public void setAnimals(AbstractAnimal[] animals){
-        this.animals = animals;
-    }
-
 
     private void checkingForNull(AbstractAnimal[] animals){
         for(int i = 0; i < animals.length; i++){
