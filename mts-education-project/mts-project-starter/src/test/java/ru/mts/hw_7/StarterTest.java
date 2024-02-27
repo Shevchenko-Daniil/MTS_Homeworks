@@ -13,6 +13,9 @@ import ru.mts.hw_7.services.CreateAnimalServiceImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -66,7 +69,12 @@ public class StarterTest {
         @DisplayName("Test for method createAnimals(int numAnimals)")
         public void createAnimalsTest(){
             int numAnimals = 5;
-            assertEquals(createAnimalService.createAnimals(5).length, numAnimals);
+            ArrayList<AbstractAnimal> animals = new ArrayList<>();
+            Map<String, List<AbstractAnimal>> animalsMap = createAnimalService.createAnimals(numAnimals);
+            for(Map.Entry<String, List<AbstractAnimal>> entry: animalsMap.entrySet()) {
+                animals.addAll(entry.getValue());
+            }
+            assertEquals(animals.size(), numAnimals);
 
         }
     }

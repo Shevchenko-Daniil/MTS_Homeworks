@@ -7,6 +7,10 @@ import ru.mts.hw_7.config.AnimalConfig;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 
@@ -56,44 +60,55 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
 	 * @return Массив 10 случайных животных
 	 */
     @Override
-    public AbstractAnimal[] createAnimals() {
-        //System.out.println("Создали 10 животных:");
+    public Map<String, List<AbstractAnimal>> createAnimals() {
+        Map<String, List<AbstractAnimal>> animals = new HashMap<>();
 
-        // создаем массив 10 животных
-        AbstractAnimal[] animals;
-        animals = new AbstractAnimal[10];
+        List<AbstractAnimal> cats = new ArrayList<>();
+        animals.put("Cat", cats);
+        List<AbstractAnimal> wolfs = new ArrayList<>();
+        animals.put("Wolf", wolfs);
+        List<AbstractAnimal> sharks = new ArrayList<>();
+        animals.put("Shark", sharks);
+        List<AbstractAnimal> parrots = new ArrayList<>();
+        animals.put("Parrot", parrots);
 
-        int count = 0; //счетчик по циклу
+        for(int i = 0; i<10;i++){
+            AbstractAnimal animal = createRandomAnimal();
+            Class<? extends AbstractAnimal> clazz = animal.getClass();
+            String className = clazz.getSimpleName();
 
-        do {
-            animals[count] = createRandomAnimal();
-            count++;
+            animals.get(className).add(animal);
         }
-        while (count < 10);
-		return animals;
+        return animals;
     }
 
     /**
      * @return Массив numOfAnimals случайных животных
      */
-    public AbstractAnimal[] createAnimals(int numOfAnimals) {
+    public Map<String, List<AbstractAnimal>> createAnimals(int numOfAnimals) {
 
         if (numOfAnimals < 0) {
             throw new IllegalArgumentException("Некорректное значение количества животных");
         }
         else {
 
-            //System.out.println("Создали " + numOfAnimals + " животных:");
+            Map<String, List<AbstractAnimal>> animals = new HashMap<>();
 
-            //создаем массив животных длинной numOfAnimals
-            AbstractAnimal[] animals;
-            animals = new AbstractAnimal[numOfAnimals];
+            List<AbstractAnimal> cats = new ArrayList<>();
+            animals.put("Cat", cats);
+            List<AbstractAnimal> wolfs = new ArrayList<>();
+            animals.put("Wolf", wolfs);
+            List<AbstractAnimal> sharks = new ArrayList<>();
+            animals.put("Shark", sharks);
+            List<AbstractAnimal> parrots = new ArrayList<>();
+            animals.put("Parrot", parrots);
 
-            for (int count = 0; count < numOfAnimals; count++) {
+            for(int i = 0; i<numOfAnimals;i++){
+                AbstractAnimal animal = createRandomAnimal();
+                Class<? extends AbstractAnimal> clazz = animal.getClass();
+                String className = clazz.getSimpleName();
 
-                animals[count] = createRandomAnimal();
-
-
+                animals.get(className).add(animal);
             }
             return animals;
         }

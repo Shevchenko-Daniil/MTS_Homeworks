@@ -6,6 +6,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.mts.hw_7.animals.AbstractAnimal;
 
+import java.time.LocalDate;
+import java.util.Map;
+
 @Service
 public class ScheduledService {
 
@@ -17,18 +20,22 @@ public class ScheduledService {
 
         ////метод findLeapYearNames
         System.out.println("Метод findLeapYearNames");
-        String[] leapNames = animalsRepository.findLeapYearNames();
-        for(int i = 0; i< leapNames.length; i++){
-            System.out.println(leapNames[i]);
+        Map<String, LocalDate> leapAnimals = animalsRepository.findLeapYearNames();
+        for(Map.Entry<String, LocalDate> entry: leapAnimals.entrySet()) {
+            String key = entry.getKey();
+            LocalDate value = entry.getValue();
+
+            System.out.println(key + ":" + value);
         }
 
         //метод findOlderAnimal
         System.out.println();
         System.out.println("Метод findOlderAnimal");
         int minAge = 5;
-        AbstractAnimal[] oldAnimals = animalsRepository.findOlderAnimal(minAge);
-        for(int i = 0; i< oldAnimals.length; i++){
-            oldAnimals[i].printAnimal();
+        Map<AbstractAnimal, Integer> oldAnimals = animalsRepository.findOlderAnimal(minAge);
+        for(Map.Entry<AbstractAnimal, Integer> entry: oldAnimals.entrySet()) {
+            AbstractAnimal key = entry.getKey();
+            key.printAnimal();
         }
 
         //метод printDuplicate
@@ -39,9 +46,11 @@ public class ScheduledService {
         //метод findDuplicate
         System.out.println();
         System.out.println("Метод findDuplicate");
-        AbstractAnimal[] duplicateAnimals = animalsRepository.findDuplicate();
-        for(int i = 0; i< duplicateAnimals.length; i++){
-            duplicateAnimals[i].printAnimal();
+        Map<String, Integer> duplicateAnimals = animalsRepository.findDuplicate();
+        for(Map.Entry<String, Integer> entry: duplicateAnimals.entrySet()) {
+            String key = entry.getKey();
+            Integer value = entry.getValue();
+            System.out.println(key + "=" + value);
         }
     }
 }

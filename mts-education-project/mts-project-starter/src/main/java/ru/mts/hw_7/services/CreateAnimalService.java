@@ -5,6 +5,10 @@ import ru.mts.hw_7.animals.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Scope(value = "prototype")
@@ -45,17 +49,26 @@ public interface CreateAnimalService {
     /**
      * @return Массив 10 случайных животных
      */
-    default AbstractAnimal[] createAnimals() {
-        //System.out.println("Создали 10 животных:");
+    default Map<String, List<AbstractAnimal>> createAnimals() {
 
-        // создаем массив 10 животных
-        AbstractAnimal[] animals;
-        animals = new AbstractAnimal[10];
+        Map<String, List<AbstractAnimal>> animals = new HashMap<>();
 
-        int count = 0; //счетчик по циклу
-        while (count < 10) {
+        List<AbstractAnimal> cats = new ArrayList<>();
+        animals.put("Cat", cats);
+        List<AbstractAnimal> wolfs = new ArrayList<>();
+        animals.put("Wolf", wolfs);
+        List<AbstractAnimal> sharks = new ArrayList<>();
+        animals.put("Shark", sharks);
+        List<AbstractAnimal> parrots = new ArrayList<>();
+        animals.put("Parrot", parrots);
 
-            animals[count] = createRandomAnimal();
+        int count = 0;
+        while(count < 10){
+            AbstractAnimal animal = createRandomAnimal();
+            Class<? extends AbstractAnimal> clazz = animal.getClass();
+            String className = clazz.getSimpleName();
+
+            animals.get(className).add(animal);
             count++;
         }
         return animals;
