@@ -49,22 +49,20 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
         Map<AbstractAnimal, Integer> olderAnimals = new HashMap<>(); //создаем мапу под животных
 
-        long nowDateEpoch = LocalDate.now().toEpochDay();
         AbstractAnimal oldAnimal = animals.get(0);
 
         for(int i = 0; i < animals.size(); i++){
-            long birthDateEpoch = animals.get(i).getBirthDate().plusYears(minAge).toEpochDay(); //прбавляем к дате орождения minAge
             //ищем самое старое животное
-            if(birthDateEpoch < oldAnimal.getBirthDate().plusYears(minAge).toEpochDay()){
+            if(animals.get(i).getBirthDate().plusYears(minAge).isBefore(oldAnimal.getBirthDate().plusYears(minAge))){
                 oldAnimal = animals.get(i);
             }
-            if(birthDateEpoch < nowDateEpoch){
+            if(animals.get(i).getBirthDate().plusYears(minAge).isBefore(LocalDate.now())){
                 Integer age = Period.between(animals.get(i).getBirthDate(), LocalDate.now()).getYears();
                 olderAnimals.put(animals.get(i), age);
             }
         }
         if(olderAnimals.isEmpty()){
-            olderAnimals.put(oldAnimal, (Integer) Period.between(oldAnimal.getBirthDate(), LocalDate.now()).getYears());
+            olderAnimals.put(oldAnimal, Period.between(oldAnimal.getBirthDate(), LocalDate.now()).getYears());
         }
         return olderAnimals;
     }
