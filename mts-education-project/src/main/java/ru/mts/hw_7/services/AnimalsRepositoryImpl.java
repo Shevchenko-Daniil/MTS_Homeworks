@@ -7,85 +7,108 @@ import ru.mts.hw_7.animals.AbstractAnimal;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Objects;
+import java.time.Period;
+import java.util.*;
 
 @Repository
 public class AnimalsRepositoryImpl implements AnimalsRepository {
-    private AbstractAnimal[] animals;
+    private ArrayList<AbstractAnimal> animals;
     @Autowired
     private CreateAnimalService createAnimalService;
 
     @PostConstruct
     public void init(){
-        animals = createAnimalService.createAnimals();
+        animals = new ArrayList<>();
+        Map<String, List<AbstractAnimal>> animalsMap = createAnimalService.createAnimals();
+        for(Map.Entry<String, List<AbstractAnimal>> entry: animalsMap.entrySet()) {
+            animals.addAll(entry.getValue());
+        }
     }
 
     @Override
-    public String[] findLeapYearNames(){
-        checkingForNull(animals); //проверяем массив
-        ArrayList<String> LeapYearNames = new ArrayList<String>();  //создаем массив для имен
+    public Map<String, LocalDate> findLeapYearNames(){
+        checkingForNull(animals); //проверяем список
 
-        for(int i =0; i < animals.length; i++){
-            if(checkLeapYear(animals[i].getBirthDate().getYear())){
-                LeapYearNames.add(animals[i].getName()); //добавляем имя в массив
+        Map<String, LocalDate> leapYearNames = new HashMap<>(); //создаем мапу под животных
 
+        for(int i =0; i < animals.size(); i++){
+            if(checkLeapYear(animals.get(i).getBirthDate().getYear())){
+                String key = animals.get(i).getClass().getSimpleName() + " " + animals.get(i).getName();
+                leapYearNames.put(key, animals.get(i).getBirthDate());
             }
         }
-        return LeapYearNames.toArray(new String[0]);
+        return leapYearNames;
     }
 
     @Override
-    public AbstractAnimal[] findOlderAnimal(int minAge){
-        checkingForNull(animals); //проверяем массив
-        ArrayList<AbstractAnimal> olderAnimal = new ArrayList<AbstractAnimal>();  //создаем массив для животных
-
+    public Map<AbstractAnimal, Integer> findOlderAnimal(int minAge){
+        checkingForNull(animals); //проверяем список
         if(minAge < 0){
             throw new IllegalArgumentException("Неверное значение возраста для сравнения");
         }
 
-        long nowDateEpoch = LocalDate.now().toEpochDay();
+        Map<AbstractAnimal, Integer> olderAnimals = new HashMap<>(); //создаем мапу под животных
 
-        for(int i = 0; i < animals.length; i++){
-            long birthDateEpoch = animals[i].getBirthDate().plusYears(minAge).toEpochDay(); //прбавляем к дате орождения minAge
-            if(birthDateEpoch < nowDateEpoch){
-                olderAnimal.add(animals[i]); //добавляем животное в массив
+        AbstractAnimal oldAnimal = animals.get(0);
+
+        for(int i = 0; i < animals.size(); i++){
+            //ищем самое старое животное
+            if(animals.get(i).getBirthDate().plusYears(minAge).isBefore(oldAnimal.getBirthDate().plusYears(minAge))){
+                oldAnimal = animals.get(i);
+            }
+            if(animals.get(i).getBirthDate().plusYears(minAge).isBefore(LocalDate.now())){
+                Integer age = Period.between(animals.get(i).getBirthDate(), LocalDate.now()).getYears();
+                olderAnimals.put(animals.get(i), age);
             }
         }
-        return olderAnimal.toArray(new AbstractAnimal[0]);
+        if(olderAnimals.isEmpty()){
+            olderAnimals.put(oldAnimal, Period.between(oldAnimal.getBirthDate(), LocalDate.now()).getYears());
+        }
+        return olderAnimals;
     }
 
 
     @Override
-    public AbstractAnimal[] findDuplicate(){
-        checkingForNull(animals); //проверяем массив
-        ArrayList<AbstractAnimal> duplicateAnimal = new ArrayList<AbstractAnimal>();  //создаем массив для дубликатов
+    public Map<String, Integer> findDuplicate(){
+        checkingForNull(animals); //проверяем список
+
+        Map<String, Integer> duplicateAnimals = new HashMap<>();
+        duplicateAnimals.put("Cat", 0);
+        duplicateAnimals.put("Wolf", 0);
+        duplicateAnimals.put("Shark", 0);
+        duplicateAnimals.put("Parrot", 0);
+
 
         HashSet<AbstractAnimal> animalsSet = new HashSet<>();
 
-        for(int i = 0; i < animals.length; i++){
-            if(!animalsSet.add(animals[i])){
-                duplicateAnimal.add(animals[i]);
+        for(int i = 0; i < animals.size(); i++){
+            if(!animalsSet.add(animals.get(i))){
+                String className = animals.get(i).getClass().getSimpleName();
+                duplicateAnimals.put(className, duplicateAnimals.get(className) + 1);
             }
         }
 
-        return duplicateAnimal.toArray(new AbstractAnimal[0]);
+        Iterator<Map.Entry<String, Integer>> itr = duplicateAnimals.entrySet().iterator();
+        while(itr.hasNext()) {
+            Map.Entry<String, Integer> entry =  itr.next();
+            if(entry.getValue() == 0){
+                itr.remove();
+            }
+        }
+
+        return duplicateAnimals;
     }
 
     @Override
     public void printDuplicate(){
-        AbstractAnimal[] duplicateAnimal = this.findDuplicate();
-
-        for(int i = 0; i < duplicateAnimal.length; i++){
-            duplicateAnimal[i].printAnimal();
-        }
+        Map<String, Integer> duplicateAnimals = this.findDuplicate();
+        duplicateAnimals.forEach((key, value) -> System.out.println(key + "=" + value));
     }
 
 
-    private void checkingForNull(AbstractAnimal[] animals){
-        for(int i = 0; i < animals.length; i++){
-            if(Objects.isNull(animals[i])){
+    private void checkingForNull(ArrayList<AbstractAnimal> animals){
+        for(int i = 0; i < animals.size(); i++){
+            if(Objects.isNull(animals.get(i))){
                 throw new IllegalArgumentException("В массиве присутствуют null объекты");
             }
         }
