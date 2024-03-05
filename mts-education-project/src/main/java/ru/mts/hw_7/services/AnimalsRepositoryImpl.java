@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class AnimalsRepositoryImpl implements AnimalsRepository {
@@ -30,13 +31,20 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         checkingForNull(animals); //проверяем список
 
         Map<String, LocalDate> leapYearNames = new HashMap<>(); //создаем мапу под животных
-
+/*
         for(int i =0; i < animals.size(); i++){
             if(checkLeapYear(animals.get(i).getBirthDate().getYear())){
                 String key = animals.get(i).getClass().getSimpleName() + " " + animals.get(i).getName();
                 leapYearNames.put(key, animals.get(i).getBirthDate());
             }
         }
+*/
+
+        animals.stream()
+                .filter(animal -> checkLeapYear(animal.getBirthDate().getYear()))
+                .forEach(animal -> leapYearNames.put(animal.getClass().getSimpleName() + " " + animal.getName()
+                                , animal.getBirthDate()));
+
         return leapYearNames;
     }
 
@@ -103,6 +111,47 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     public void printDuplicate(){
         Map<String, Integer> duplicateAnimals = this.findDuplicate();
         duplicateAnimals.forEach((key, value) -> System.out.println(key + "=" + value));
+    }
+
+    @Override
+    public void findAverageAge(){
+        checkingForNull(animals);
+        System.out.println(
+                animals.stream()
+                .mapToInt(animal -> Period.between(animal.getBirthDate(), LocalDate.now()).getYears())
+                .average()
+                .orElseThrow(() -> new RuntimeException("Не удалось посчитать средний возраст"))
+        );
+    }
+
+    @Override
+    public List<AbstractAnimal> findOldAndExpensive(){
+        checkingForNull(animals);
+        double averageCost = animals.stream()
+                .mapToDouble(animal -> animal.getCost().doubleValue())
+                .average()
+                .orElseThrow(() -> new RuntimeException("Не удалось посчитать средний возраст"));
+        return animals.stream()
+                .filter(animal -> (animal.getCost().doubleValue() > averageCost &&
+                        Period.between(animal.getBirthDate(), LocalDate.now()).getYears() > 5))
+                .sorted(Comparator.comparing(AbstractAnimal::getBirthDate))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findMinCostAnimals(){
+        checkingForNull(animals);
+        List<String> names = new ArrayList<>(3);
+        List<AbstractAnimal> sortAnimals = animals.stream()
+                .sorted(Comparator.comparing(AbstractAnimal::getCost))
+                .collect(Collectors.toList());
+        names.add(sortAnimals.get(0).getName());
+        names.add(sortAnimals.get(1).getName());
+        names.add(sortAnimals.get(2).getName());
+
+        return names.stream()
+                .sorted((name1, name2) -> -name1.compareTo(name2))
+                .collect(Collectors.toList());
     }
 
 

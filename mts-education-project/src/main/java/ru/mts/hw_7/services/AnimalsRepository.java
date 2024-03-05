@@ -3,6 +3,7 @@ package ru.mts.hw_7.services;
 import ru.mts.hw_7.animals.AbstractAnimal;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 public interface AnimalsRepository {
@@ -28,5 +29,21 @@ public interface AnimalsRepository {
      */
     void printDuplicate();
 
+    /**
+     * Выовдит средний возраст списка животных
+     */
+    void findAverageAge();
+
+    /**
+     * @return Возвращает отсортированный по дате рождения список животных, которые старше 5 лет,
+     * и стоимость которых больше средней
+     */
+    List<AbstractAnimal> findOldAndExpensive();
+
+    /**
+     *
+     * @return Возвращает список имен, отсортированный в обратном алфавитном порядке, трех животных с самой низкой ценой
+     */
+    List<String> findMinCostAnimals();
 
 }
