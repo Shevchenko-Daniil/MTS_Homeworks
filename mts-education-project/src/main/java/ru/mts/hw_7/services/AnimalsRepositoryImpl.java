@@ -11,6 +11,8 @@ import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.groupingBy;
+
 @Repository
 public class AnimalsRepositoryImpl implements AnimalsRepository {
     private ArrayList<AbstractAnimal> animals;
@@ -31,19 +33,11 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         checkingForNull(animals); //проверяем список
 
         Map<String, LocalDate> leapYearNames = new HashMap<>(); //создаем мапу под животных
-/*
-        for(int i =0; i < animals.size(); i++){
-            if(checkLeapYear(animals.get(i).getBirthDate().getYear())){
-                String key = animals.get(i).getClass().getSimpleName() + " " + animals.get(i).getName();
-                leapYearNames.put(key, animals.get(i).getBirthDate());
-            }
-        }
-*/
 
         animals.stream()
                 .filter(animal -> checkLeapYear(animal.getBirthDate().getYear()))
-                .forEach(animal -> leapYearNames.put(animal.getClass().getSimpleName() + " " + animal.getName()
-                                , animal.getBirthDate()));
+                .forEach(animal -> leapYearNames.put(animal.getClass().getSimpleName() + " " + animal.getName(),
+                        animal.getBirthDate()));
 
         return leapYearNames;
     }
@@ -57,60 +51,41 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
         Map<AbstractAnimal, Integer> olderAnimals = new HashMap<>(); //создаем мапу под животных
 
-        AbstractAnimal oldAnimal = animals.get(0);
-
-        for(int i = 0; i < animals.size(); i++){
-            //ищем самое старое животное
-            if(animals.get(i).getBirthDate().plusYears(minAge).isBefore(oldAnimal.getBirthDate().plusYears(minAge))){
-                oldAnimal = animals.get(i);
-            }
-            if(animals.get(i).getBirthDate().plusYears(minAge).isBefore(LocalDate.now())){
-                Integer age = Period.between(animals.get(i).getBirthDate(), LocalDate.now()).getYears();
-                olderAnimals.put(animals.get(i), age);
-            }
-        }
+        animals.stream()
+                .filter(animal -> animal.getBirthDate().plusYears(minAge).isBefore(LocalDate.now()))
+                .forEach(animal -> olderAnimals.put(animal,
+                        Period.between(animal.getBirthDate(), LocalDate.now()).getYears()));
+        //если нет животных старше minAge
         if(olderAnimals.isEmpty()){
+            AbstractAnimal oldAnimal = animals.stream()
+                    .min(Comparator.comparing(AbstractAnimal::getBirthDate)).get();
             olderAnimals.put(oldAnimal, Period.between(oldAnimal.getBirthDate(), LocalDate.now()).getYears());
         }
+
+
         return olderAnimals;
     }
 
 
     @Override
-    public Map<String, Integer> findDuplicate(){
+    public Map<String, List<AbstractAnimal>> findDuplicate(){
         checkingForNull(animals); //проверяем список
-
-        Map<String, Integer> duplicateAnimals = new HashMap<>();
-        duplicateAnimals.put("Cat", 0);
-        duplicateAnimals.put("Wolf", 0);
-        duplicateAnimals.put("Shark", 0);
-        duplicateAnimals.put("Parrot", 0);
-
 
         HashSet<AbstractAnimal> animalsSet = new HashSet<>();
 
-        for(int i = 0; i < animals.size(); i++){
-            if(!animalsSet.add(animals.get(i))){
-                String className = animals.get(i).getClass().getSimpleName();
-                duplicateAnimals.put(className, duplicateAnimals.get(className) + 1);
-            }
-        }
-
-        Iterator<Map.Entry<String, Integer>> itr = duplicateAnimals.entrySet().iterator();
-        while(itr.hasNext()) {
-            Map.Entry<String, Integer> entry =  itr.next();
-            if(entry.getValue() == 0){
-                itr.remove();
-            }
-        }
-
-        return duplicateAnimals;
+        return animals.stream()
+                .filter(animal -> !animalsSet.add(animal))
+                .collect(groupingBy(animal -> animal.getClass().getSimpleName()));
     }
 
     @Override
     public void printDuplicate(){
-        Map<String, Integer> duplicateAnimals = this.findDuplicate();
-        duplicateAnimals.forEach((key, value) -> System.out.println(key + "=" + value));
+        Map<String, List<AbstractAnimal>> duplicateAnimals = this.findDuplicate();
+        ArrayList<List<AbstractAnimal>> duplicateListList= new ArrayList<>(duplicateAnimals.values());
+        List<AbstractAnimal> duplicateList = duplicateListList.stream()
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList());
+        duplicateList.forEach(AbstractAnimal::printAnimal);
     }
 
     @Override

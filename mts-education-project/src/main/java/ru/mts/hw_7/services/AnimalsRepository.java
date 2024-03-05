@@ -3,26 +3,27 @@ package ru.mts.hw_7.services;
 import ru.mts.hw_7.animals.AbstractAnimal;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public interface AnimalsRepository {
 
     /**
-     * @return Возвращает массив имен животных, которые родились в високосный год
+     * @return Возвращает пару Имя-дата рождения животных, рожденных в високосный год
      */
     Map<String, LocalDate> findLeapYearNames();
 
     /**
      * @param minAge - возраст, старше которого возвращаемые животные
-     * @return Возвращает массив животных, возраст которых превышает minAge лет
+     * @return Возвращает пару животное-возраст животных, возраст которых превышает minAge лет
      */
     Map<AbstractAnimal, Integer> findOlderAnimal(int minAge);
 
     /**
-     * @return Возвращает массив животных-дубликатов
+     * @return Возвращает пары Тип-список дубликатов
      */
-    Map<String, Integer> findDuplicate();
+    Map<String, List<AbstractAnimal>> findDuplicate();
 
     /**
      * Выводит массив животных-дубликатов в масииве animals

@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -116,11 +117,17 @@ public class AnimalRepositoryTest {
         @DisplayName("Test for findDuplicate method")
         public void findDuplicateTest() {
 
-            Map<String, Integer> duplicateAnimal = animalsRepository.findDuplicate();
-            Map<String, Integer> trueDuplicateAnimals = new HashMap<>();
-            trueDuplicateAnimals.put("Parrot", 1);
-            trueDuplicateAnimals.put("Cat", 1);
-            trueDuplicateAnimals.put("Wolf", 1);
+            Map<String, List<AbstractAnimal>> duplicateAnimal = animalsRepository.findDuplicate();
+            Map<String, List<AbstractAnimal>> trueDuplicateAnimals = new HashMap<>();
+            ArrayList<AbstractAnimal> parrots= new ArrayList<>();
+            parrots.add(new Parrot("2", "Рекс", BigDecimal.valueOf(100.0), "11", LocalDate.of(1904, 3, 15)));
+            trueDuplicateAnimals.put("Parrot", parrots);
+            ArrayList<AbstractAnimal> cats= new ArrayList<>();
+            cats.add(new Cat("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.of(2020, 3, 15)));
+            trueDuplicateAnimals.put("Cat", cats);
+            ArrayList<AbstractAnimal> wolfs= new ArrayList<>();
+            wolfs.add(new Wolf("1", "Барсик", BigDecimal.valueOf(100.0), "11", LocalDate.of(2020, 3, 15)));
+            trueDuplicateAnimals.put("Wolf", wolfs);
             assertEquals(trueDuplicateAnimals, duplicateAnimal);
         }
 
