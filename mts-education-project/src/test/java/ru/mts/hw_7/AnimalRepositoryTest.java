@@ -40,12 +40,17 @@ public class AnimalRepositoryTest {
     @Qualifier("AnimalsRepo")
     AnimalsRepositoryImpl animalsRepository;
 
+    @Autowired
+    @Qualifier("StreamMethodsRepo")
+    AnimalsRepositoryImpl streamMethodsRepository;
+
     @Value("${application-test.animal.names}")
     String[] animalsNames;
 
     ArrayList<AbstractAnimal> animals;
     ArrayList<AbstractAnimal> oldAnimals;
     ArrayList<AbstractAnimal> leapYearAnimals;
+    ArrayList<AbstractAnimal> streamMethodsAnimals;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -97,6 +102,20 @@ public class AnimalRepositoryTest {
         animals.add(new Parrot("2", "Рекс", BigDecimal.valueOf(100.0), "11", LocalDate.of(1904, 3, 15)));
 
         ReflectionTestUtils.setField(animalsRepository, "animals", animals);
+    }
+
+    @BeforeEach
+    public void setStreamMethodsRepository() {
+        streamMethodsAnimals = new ArrayList<>();
+
+        streamMethodsAnimals.add(new Cat("1", "a", BigDecimal.valueOf(30.0), "11", LocalDate.now().minusYears(17)));
+        streamMethodsAnimals.add(new Wolf("1", "b", BigDecimal.valueOf(20.0), "11", LocalDate.now().minusYears(24)));
+        streamMethodsAnimals.add(new Parrot("1", "c", BigDecimal.valueOf(80.0), "11", LocalDate.now().minusYears(24)));
+        streamMethodsAnimals.add(new Shark("1", "d", BigDecimal.valueOf(70.0), "11", LocalDate.now().minusYears(3)));
+        streamMethodsAnimals.add(new Cat("1", "e", BigDecimal.valueOf(10.0), "11", LocalDate.now().minusYears(24)));
+        streamMethodsAnimals.add(new Wolf("1", "f", BigDecimal.valueOf(70.0), "11", LocalDate.now().minusYears(10)));
+
+        ReflectionTestUtils.setField(streamMethodsRepository, "animals", streamMethodsAnimals);
     }
 
     @Nested
@@ -156,6 +175,35 @@ public class AnimalRepositoryTest {
             } else if (value == 15) {
                 assertEquals(2, oldAnimalsRepository.findOlderAnimal(value).size());
             }
+        }
+
+        @Test
+        @DisplayName("Test for findMinCostAnimals method")
+        public void findMinCostAnimalsTest() {
+            ArrayList<String> trueNames = new ArrayList<>();
+            trueNames.add("e");
+            trueNames.add("b");
+            trueNames.add("a");
+
+            assertEquals(trueNames, streamMethodsRepository.findMinCostAnimals(streamMethodsAnimals));
+        }
+
+        @Test
+        @DisplayName("Test for findOldAndExpensive method")
+        public void findOldAndExpensiveTest() {
+            ArrayList<AbstractAnimal> trueAnimals = new ArrayList<>();
+            trueAnimals.add(new Wolf("1", "f", BigDecimal.valueOf(70.0), "11", LocalDate.now().minusYears(10)));
+            trueAnimals.add(new Parrot("1", "c", BigDecimal.valueOf(80.0), "11", LocalDate.now().minusYears(24)));
+
+            assertEquals(trueAnimals, streamMethodsRepository.findOldAndExpensive(streamMethodsAnimals));
+        }
+
+        @Test
+        @DisplayName("Test for findAverageAge method")
+        public void findAverageAgeTest() {
+            System.out.println("Ожидаемый результат: 17.0");
+            System.out.print("Реальный результат: ");
+            streamMethodsRepository.findAverageAge(streamMethodsAnimals);
         }
     }
 

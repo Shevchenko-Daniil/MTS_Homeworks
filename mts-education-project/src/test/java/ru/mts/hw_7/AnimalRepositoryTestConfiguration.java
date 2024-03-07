@@ -22,4 +22,9 @@ public class AnimalRepositoryTestConfiguration {
     public AnimalsRepositoryImpl animalRepository() {
         return new AnimalsRepositoryImpl();
     }
+
+    @Bean(name = "StreamMethodsRepo")
+    public AnimalsRepositoryImpl streamMethodsRepository() {
+        return new AnimalsRepositoryImpl();
+    }
 }

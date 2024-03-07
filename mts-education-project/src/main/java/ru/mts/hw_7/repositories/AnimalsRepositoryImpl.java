@@ -112,7 +112,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         return animals.stream()
                 .filter(animal -> (animal.getCost().doubleValue() > averageCost &&
                         Period.between(animal.getBirthDate(), LocalDate.now()).getYears() > 5))
-                .sorted(Comparator.comparing(AbstractAnimal::getBirthDate))
+                .sorted((animal1, animal2) -> -animal1.getBirthDate().compareTo(animal2.getBirthDate()))
                 .collect(Collectors.toList());
     }
 
