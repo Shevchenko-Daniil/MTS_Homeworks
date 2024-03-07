@@ -128,6 +128,9 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     private void checkingForNull(List<AbstractAnimal> animals) {
+        if(animals == null){
+            throw new IllegalArgumentException("Массив не заполнен");
+        }
         for (int i = 0; i < animals.size(); i++) {
             if (Objects.isNull(animals.get(i))) {
                 throw new IllegalArgumentException("В массиве присутствуют null объекты");
