@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.mts.hw_7.animals.AbstractAnimal;
+import ru.mts.hw_7.repositories.AnimalsRepositoryImpl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduledService {
@@ -46,11 +50,11 @@ public class ScheduledService {
         //метод findDuplicate
         System.out.println();
         System.out.println("Метод findDuplicate");
-        Map<String, Integer> duplicateAnimals = animalsRepository.findDuplicate();
-        for(Map.Entry<String, Integer> entry: duplicateAnimals.entrySet()) {
-            String key = entry.getKey();
-            Integer value = entry.getValue();
-            System.out.println(key + "=" + value);
-        }
+        Map<String, List<AbstractAnimal>> duplicateAnimals = animalsRepository.findDuplicate();
+        ArrayList<List<AbstractAnimal>> duplicateListList= new ArrayList<>(duplicateAnimals.values());
+        List<AbstractAnimal> duplicateList = duplicateListList.stream()
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+        duplicateList.forEach(AbstractAnimal::printAnimal);
     }
 }
