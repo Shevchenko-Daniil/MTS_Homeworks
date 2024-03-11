@@ -10,6 +10,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
@@ -92,7 +93,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     @Override
-    public void findAverageAge(List<AbstractAnimal> animals) {
+    public void findAverageAge(Collection<AbstractAnimal> animals) {
         checkingForNull(animals);
         System.out.println(
                 animals.stream()
@@ -103,21 +104,25 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     @Override
-    public List<AbstractAnimal> findOldAndExpensive(List<AbstractAnimal> animals) {
+    public List<AbstractAnimal> findOldAndExpensive(Collection<AbstractAnimal> animals) {
         checkingForNull(animals);
+
         double averageCost = animals.stream()
                 .mapToDouble(animal -> animal.getCost().doubleValue())
                 .average()
                 .orElseThrow(() -> new RuntimeException("Не удалось посчитать средний возраст"));
+
+        Predicate<AbstractAnimal> expensiveAndOld = animal ->
+                animal.getCost().doubleValue() > averageCost &&
+                        Period.between(animal.getBirthDate(), LocalDate.now()).getYears() > 5;
         return animals.stream()
-                .filter(animal -> (animal.getCost().doubleValue() > averageCost &&
-                        Period.between(animal.getBirthDate(), LocalDate.now()).getYears() > 5))
+                .filter(expensiveAndOld)
                 .sorted((animal1, animal2) -> -animal1.getBirthDate().compareTo(animal2.getBirthDate()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<String> findMinCostAnimals(List<AbstractAnimal> animals) {
+    public List<String> findMinCostAnimals(Collection<AbstractAnimal> animals) {
         checkingForNull(animals);
         return animals.stream()
                 .sorted(Comparator.comparing(AbstractAnimal::getCost))
@@ -127,14 +132,12 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .collect(Collectors.toList());
     }
 
-    private void checkingForNull(List<AbstractAnimal> animals) {
+    private void checkingForNull(Collection<AbstractAnimal> animals) {
         if(animals == null){
             throw new IllegalArgumentException("Массив не заполнен");
         }
-        for (int i = 0; i < animals.size(); i++) {
-            if (Objects.isNull(animals.get(i))) {
-                throw new IllegalArgumentException("В массиве присутствуют null объекты");
-            }
+        if(animals.contains(null)){
+            throw new IllegalArgumentException("В массиве присутствуют null объекты");
         }
     }
 
