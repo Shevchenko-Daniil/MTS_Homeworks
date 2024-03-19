@@ -3,6 +3,8 @@ package ru.mts.hw_7.repositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.mts.hw_7.animals.AbstractAnimal;
+import ru.mts.hw_7.exceptions.InvalidDataException;
+import ru.mts.hw_7.exceptions.InvalidInputException;
 import ru.mts.hw_7.services.CreateAnimalService;
 
 
@@ -48,7 +50,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     public Map<AbstractAnimal, Integer> findOlderAnimal(int minAge) {
         checkingForNull(animals); //проверяем список
         if (minAge < 0) {
-            throw new IllegalArgumentException("Неверное значение возраста для сравнения");
+            throw new InvalidInputException("Неверное значение возраста для сравнения");
         }
 
         Map<AbstractAnimal, Integer> olderAnimals = new HashMap<>(); //создаем мапу под животных
@@ -134,10 +136,10 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     private void checkingForNull(Collection<AbstractAnimal> animals) {
         if(animals == null){
-            throw new IllegalArgumentException("Массив не заполнен");
+            throw new InvalidDataException("Массив не заполнен");
         }
         if(animals.contains(null)){
-            throw new IllegalArgumentException("В массиве присутствуют null объекты");
+            throw new InvalidDataException("В массиве присутствуют null объекты");
         }
     }
 

@@ -13,6 +13,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import ru.mts.hw_7.animals.*;
 import ru.mts.hw_7.config.AnimalAutoConfiguration;
 import ru.mts.hw_7.config.ConfigurationApp;
+import ru.mts.hw_7.exceptions.InvalidDataException;
+import ru.mts.hw_7.exceptions.InvalidInputException;
 import ru.mts.hw_7.repositories.AnimalsRepositoryImpl;
 
 import java.math.BigDecimal;
@@ -215,7 +217,7 @@ public class AnimalRepositoryTest {
         @DisplayName("Test for illegal argument in method findOlderAnimal")
         public void findOlderIllegalArgTest() {
             int minAge = -3;
-            Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
+            Class<InvalidInputException> exceptionClass = InvalidInputException.class;
             assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(minAge));
         }
 
@@ -227,7 +229,7 @@ public class AnimalRepositoryTest {
 
             ReflectionTestUtils.setField(animalsRepository, "animals", animals);
 
-            Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
+            Class<InvalidDataException> exceptionClass = InvalidDataException.class;
             assertThrows(exceptionClass, () -> animalsRepository.findDuplicate());
             assertThrows(exceptionClass, () -> animalsRepository.findLeapYearNames());
             assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(5));
