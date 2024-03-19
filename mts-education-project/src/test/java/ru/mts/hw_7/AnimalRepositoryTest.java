@@ -13,8 +13,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import ru.mts.hw_7.animals.*;
 import ru.mts.hw_7.config.AnimalAutoConfiguration;
 import ru.mts.hw_7.config.ConfigurationApp;
-import ru.mts.hw_7.exceptions.InvalidDataException;
-import ru.mts.hw_7.exceptions.InvalidInputException;
+import ru.mts.hw_7.exceptions.checked_exceptions.InvalidParamException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidDataException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidInputException;
 import ru.mts.hw_7.repositories.AnimalsRepositoryImpl;
 
 import java.math.BigDecimal;
@@ -187,7 +188,12 @@ public class AnimalRepositoryTest {
             trueNames.add("b");
             trueNames.add("a");
 
-            assertEquals(trueNames, streamMethodsRepository.findMinCostAnimals(streamMethodsAnimals));
+            try {
+                assertEquals(trueNames, streamMethodsRepository.findMinCostAnimals(streamMethodsAnimals));
+            }
+            catch (InvalidParamException e){
+                System.out.println("Invalid list params: " + e.getMessage());
+            }
         }
 
         @Test

@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import ru.mts.hw_7.animals.AbstractAnimal;
-import ru.mts.hw_7.exceptions.InvalidDataException;
-import ru.mts.hw_7.exceptions.InvalidInputException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidDataException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidInputException;
 import ru.mts.hw_7.repositories.AnimalsRepositoryImpl;
 
 import java.time.LocalDate;
