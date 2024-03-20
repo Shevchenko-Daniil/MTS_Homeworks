@@ -60,7 +60,6 @@ public class ScheduledService {
             duplicateList.forEach(AbstractAnimal::printAnimal);
         }
         catch (InvalidDataException e){
-            StackTraceElement[] stackTraceElement = Thread.currentThread().getStackTrace();
             System.out.println("Invalid data: " + e.getMessage());
             e.printStackTrace();
         }
