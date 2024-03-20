@@ -193,6 +193,7 @@ public class AnimalRepositoryTest {
             }
             catch (InvalidParamException e){
                 System.out.println("Invalid list params: " + e.getMessage());
+                e.printStackTrace();
             }
         }
 
@@ -239,6 +240,16 @@ public class AnimalRepositoryTest {
             assertThrows(exceptionClass, () -> animalsRepository.findDuplicate());
             assertThrows(exceptionClass, () -> animalsRepository.findLeapYearNames());
             assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(5));
+        }
+
+        @Test
+        @DisplayName("Test for invalid data size in findMinCostAnimals method")
+        public void findMinCostAnimalsInvalidDataSizeTest() {
+            ArrayList<AbstractAnimal> animals = new ArrayList<>();
+            animals.add(new Cat("1", "a", BigDecimal.valueOf(30.0), "11", LocalDate.now().minusYears(17)));
+
+            Class<InvalidParamException> exceptionClass = InvalidParamException.class;
+            assertThrows(exceptionClass, () -> animalsRepository.findMinCostAnimals(animals));
         }
     }
 

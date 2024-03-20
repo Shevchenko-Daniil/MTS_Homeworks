@@ -23,8 +23,8 @@ public class ScheduledService {
 
     @Scheduled(fixedRateString = "${application.scheduler.timeRate}")
     public void doAllMethods() {
-        //метод findLeapYearNames
         try {
+            //метод findLeapYearNames
             System.out.println("Метод findLeapYearNames");
             Map<String, LocalDate> leapAnimals = animalsRepository.findLeapYearNames();
             for (Map.Entry<String, LocalDate> entry : leapAnimals.entrySet()) {
@@ -33,13 +33,8 @@ public class ScheduledService {
 
                 System.out.println(key + ":" + value);
             }
-        }
-        catch (InvalidDataException e){
-            System.out.println("Invalid data: " + e.getMessage());
-        }
 
-        //метод findOlderAnimal
-        try {
+            //метод findOlderAnimal
             System.out.println();
             System.out.println("Метод findOlderAnimal");
             int minAge = 5;
@@ -48,27 +43,13 @@ public class ScheduledService {
                 AbstractAnimal key = entry.getKey();
                 key.printAnimal();
             }
-        }
-        catch (InvalidDataException e1){
-            System.out.println("Invalid data: " + e1.getMessage());
-        }
-        catch (InvalidInputException e2){
-            System.out.println("Invalid input: " + e2.getMessage());
-        }
 
-
-        //метод printDuplicate
-        try {
+            //метод printDuplicate
             System.out.println();
             System.out.println("Метод printDuplicate");
             animalsRepository.printDuplicate();
-        }
-        catch (InvalidDataException e){
-            System.out.println("Invalid data: " + e.getMessage());
-        }
 
-        //метод findDuplicate
-        try {
+            //метод findDuplicate
             System.out.println();
             System.out.println("Метод findDuplicate");
             Map<String, List<AbstractAnimal>> duplicateAnimals = animalsRepository.findDuplicate();
@@ -79,7 +60,13 @@ public class ScheduledService {
             duplicateList.forEach(AbstractAnimal::printAnimal);
         }
         catch (InvalidDataException e){
+            StackTraceElement[] stackTraceElement = Thread.currentThread().getStackTrace();
             System.out.println("Invalid data: " + e.getMessage());
+            e.printStackTrace();
+        }
+        catch (InvalidInputException e2){
+            System.out.println("Invalid input: " + e2.getMessage());
+            e2.printStackTrace();
         }
     }
 }
