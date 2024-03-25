@@ -13,6 +13,9 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -20,14 +23,14 @@ import static java.util.stream.Collectors.groupingBy;
 
 @Repository
 public class AnimalsRepositoryImpl implements AnimalsRepository {
-    private ArrayList<AbstractAnimal> animals;
+    private CopyOnWriteArrayList<AbstractAnimal> animals;
     @Autowired
     private CreateAnimalService createAnimalService;
 
     @PostConstruct
     public void init() {
-        animals = new ArrayList<>();
-        Map<String, List<AbstractAnimal>> animalsMap = createAnimalService.createAnimals();
+        animals = new CopyOnWriteArrayList<>();
+        Map<String, List<AbstractAnimal>> animalsMap = new ConcurrentHashMap<>(createAnimalService.createAnimals());
         for (Map.Entry<String, List<AbstractAnimal>> entry : animalsMap.entrySet()) {
             animals.addAll(entry.getValue());
         }
@@ -37,7 +40,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     public Map<String, LocalDate> findLeapYearNames() {
         checkingForNull(animals); //проверяем список
 
-        Map<String, LocalDate> leapYearNames = new HashMap<>(); //создаем мапу под животных
+        Map<String, LocalDate> leapYearNames = new ConcurrentHashMap<>(); //создаем мапу под животных
 
         animals.stream()
                 .filter(animal -> checkLeapYear(animal.getBirthDate().getYear()))
@@ -54,7 +57,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
             throw new InvalidInputException("Неверное значение возраста для сравнения");
         }
 
-        Map<AbstractAnimal, Integer> olderAnimals = new HashMap<>(); //создаем мапу под животных
+        Map<AbstractAnimal, Integer> olderAnimals = new ConcurrentHashMap<>(); //создаем мапу под животных
 
         animals.stream()
                 .filter(animal -> animal.getBirthDate().plusYears(minAge).isBefore(LocalDate.now()))
@@ -78,7 +81,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     public Map<String, List<AbstractAnimal>> findDuplicate() {
         checkingForNull(animals); //проверяем список
 
-        HashSet<AbstractAnimal> animalsSet = new HashSet<>();
+        Set<AbstractAnimal> animalsSet = new CopyOnWriteArraySet<>();
 
         return animals.stream()
                 .filter(animal -> !animalsSet.add(animal))
@@ -87,8 +90,8 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
 
     @Override
     public void printDuplicate() {
-        Map<String, List<AbstractAnimal>> duplicateAnimals = this.findDuplicate();
-        ArrayList<List<AbstractAnimal>> duplicateListList = new ArrayList<>(duplicateAnimals.values());
+        Map<String, List<AbstractAnimal>> duplicateAnimals = new ConcurrentHashMap<>(this.findDuplicate());
+        CopyOnWriteArrayList<List<AbstractAnimal>> duplicateListList = new CopyOnWriteArrayList<>(duplicateAnimals.values());
         List<AbstractAnimal> duplicateList = duplicateListList.stream()
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
