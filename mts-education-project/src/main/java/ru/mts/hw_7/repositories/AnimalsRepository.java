@@ -1,6 +1,7 @@
 package ru.mts.hw_7.repositories;
 
 import ru.mts.hw_7.animals.AbstractAnimal;
+import ru.mts.hw_7.exceptions.checked_exceptions.InvalidParamException;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -44,6 +45,6 @@ public interface AnimalsRepository {
     /**
      * @return Возвращает список имен, отсортированный в обратном алфавитном порядке, трех животных с самой низкой ценой
      */
-    List<String> findMinCostAnimals(Collection<AbstractAnimal> animals);
+    List<String> findMinCostAnimals(Collection<AbstractAnimal> animals) throws InvalidParamException;
 
 }

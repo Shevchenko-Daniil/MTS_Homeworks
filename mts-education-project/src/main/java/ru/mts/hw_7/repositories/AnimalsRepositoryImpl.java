@@ -3,6 +3,9 @@ package ru.mts.hw_7.repositories;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.mts.hw_7.animals.AbstractAnimal;
+import ru.mts.hw_7.exceptions.checked_exceptions.InvalidParamException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidDataException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidInputException;
 import ru.mts.hw_7.services.CreateAnimalService;
 
 
@@ -48,7 +51,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     public Map<AbstractAnimal, Integer> findOlderAnimal(int minAge) {
         checkingForNull(animals); //проверяем список
         if (minAge < 0) {
-            throw new IllegalArgumentException("Неверное значение возраста для сравнения");
+            throw new InvalidInputException("Неверное значение возраста для сравнения");
         }
 
         Map<AbstractAnimal, Integer> olderAnimals = new HashMap<>(); //создаем мапу под животных
@@ -110,7 +113,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         double averageCost = animals.stream()
                 .mapToDouble(animal -> animal.getCost().doubleValue())
                 .average()
-                .orElseThrow(() -> new RuntimeException("Не удалось посчитать средний возраст"));
+                .orElseThrow(() -> new RuntimeException("Не удалось посчитать среднюю стоимость"));
 
         Predicate<AbstractAnimal> expensiveAndOld = animal ->
                 animal.getCost().doubleValue() > averageCost &&
@@ -122,8 +125,11 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     @Override
-    public List<String> findMinCostAnimals(Collection<AbstractAnimal> animals) {
+    public List<String> findMinCostAnimals(Collection<AbstractAnimal> animals) throws InvalidParamException {
         checkingForNull(animals);
+        if (animals.size() < 3) {
+            throw new InvalidParamException("Слишком маленький размер массива");
+        }
         return animals.stream()
                 .sorted(Comparator.comparing(AbstractAnimal::getCost))
                 .limit(3)
@@ -133,11 +139,11 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     }
 
     private void checkingForNull(Collection<AbstractAnimal> animals) {
-        if(animals == null){
-            throw new IllegalArgumentException("Массив не заполнен");
+        if (animals == null) {
+            throw new InvalidDataException("Массив не заполнен");
         }
-        if(animals.contains(null)){
-            throw new IllegalArgumentException("В массиве присутствуют null объекты");
+        if (animals.contains(null)) {
+            throw new InvalidDataException("В массиве присутствуют null объекты");
         }
     }
 

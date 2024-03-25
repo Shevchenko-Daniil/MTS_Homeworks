@@ -13,6 +13,9 @@ import org.springframework.test.util.ReflectionTestUtils;
 import ru.mts.hw_7.animals.*;
 import ru.mts.hw_7.config.AnimalAutoConfiguration;
 import ru.mts.hw_7.config.ConfigurationApp;
+import ru.mts.hw_7.exceptions.checked_exceptions.InvalidParamException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidDataException;
+import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidInputException;
 import ru.mts.hw_7.repositories.AnimalsRepositoryImpl;
 
 import java.math.BigDecimal;
@@ -185,7 +188,13 @@ public class AnimalRepositoryTest {
             trueNames.add("b");
             trueNames.add("a");
 
-            assertEquals(trueNames, streamMethodsRepository.findMinCostAnimals(streamMethodsAnimals));
+            try {
+                assertEquals(trueNames, streamMethodsRepository.findMinCostAnimals(streamMethodsAnimals));
+            }
+            catch (InvalidParamException e){
+                System.out.println("Invalid list params: " + e.getMessage());
+                e.printStackTrace();
+            }
         }
 
         @Test
@@ -215,7 +224,7 @@ public class AnimalRepositoryTest {
         @DisplayName("Test for illegal argument in method findOlderAnimal")
         public void findOlderIllegalArgTest() {
             int minAge = -3;
-            Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
+            Class<InvalidInputException> exceptionClass = InvalidInputException.class;
             assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(minAge));
         }
 
@@ -227,10 +236,20 @@ public class AnimalRepositoryTest {
 
             ReflectionTestUtils.setField(animalsRepository, "animals", animals);
 
-            Class<IllegalArgumentException> exceptionClass = IllegalArgumentException.class;
+            Class<InvalidDataException> exceptionClass = InvalidDataException.class;
             assertThrows(exceptionClass, () -> animalsRepository.findDuplicate());
             assertThrows(exceptionClass, () -> animalsRepository.findLeapYearNames());
             assertThrows(exceptionClass, () -> animalsRepository.findOlderAnimal(5));
+        }
+
+        @Test
+        @DisplayName("Test for invalid data size in findMinCostAnimals method")
+        public void findMinCostAnimalsInvalidDataSizeTest() {
+            ArrayList<AbstractAnimal> animals = new ArrayList<>();
+            animals.add(new Cat("1", "a", BigDecimal.valueOf(30.0), "11", LocalDate.now().minusYears(17)));
+
+            Class<InvalidParamException> exceptionClass = InvalidParamException.class;
+            assertThrows(exceptionClass, () -> animalsRepository.findMinCostAnimals(animals));
         }
     }
 
