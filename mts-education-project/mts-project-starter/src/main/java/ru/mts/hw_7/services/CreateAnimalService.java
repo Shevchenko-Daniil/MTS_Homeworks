@@ -74,11 +74,16 @@ public interface CreateAnimalService {
         return animals;
 
     }
+    /**
+     * @return Массив numOfAnimals случайных животных
+     */
+    Map<String, List<AbstractAnimal>> createAnimals(int numOfAnimals);
     //генерирует случайное имя
     private String generateRandomName(){
         int nameIndex = (int) (Math.random() * AnimalName.values().length);
         return AnimalName.values()[nameIndex].getTitle();
     }
+
     //генерирует случайный характер
     private String generateRandomCharacter(){
         int characterIndex = (int) (Math.random() * AnimalCharacter.values().length);

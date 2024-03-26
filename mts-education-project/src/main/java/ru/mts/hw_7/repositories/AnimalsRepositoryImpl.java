@@ -30,7 +30,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
     @PostConstruct
     public void init() {
         animals = new CopyOnWriteArrayList<>();
-        Map<String, List<AbstractAnimal>> animalsMap = new ConcurrentHashMap<>(createAnimalService.createAnimals());
+        Map<String, List<AbstractAnimal>> animalsMap = new ConcurrentHashMap<>(createAnimalService.createAnimals(20));
         for (Map.Entry<String, List<AbstractAnimal>> entry : animalsMap.entrySet()) {
             animals.addAll(entry.getValue());
         }
@@ -139,6 +139,10 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .map(AbstractAnimal::getName)
                 .sorted((name1, name2) -> -name1.compareTo(name2))
                 .collect(Collectors.toList());
+    }
+
+    public CopyOnWriteArrayList<AbstractAnimal> getAnimals() {
+        return animals;
     }
 
     private void checkingForNull(Collection<AbstractAnimal> animals) {

@@ -9,6 +9,7 @@ import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidDataException;
 import ru.mts.hw_7.exceptions.unchecked_exceptions.InvalidInputException;
 import ru.mts.hw_7.repositories.AnimalsRepositoryImpl;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,40 @@ public class ScheduledService {
 
     @Autowired
     private AnimalsRepositoryImpl animalsRepository;
+
+    @PostConstruct
+    public void init(){
+
+        Runnable runnable1 = ()->{
+            try{
+                Thread.sleep(10000);
+                System.out.println(Thread.currentThread().getName() + " thread started");
+                animalsRepository.printDuplicate();
+            }
+            catch(InterruptedException e){
+                System.out.println("Thread has been interrupted");
+            }
+            System.out.println(Thread.currentThread().getName() + " thread finished");
+        };
+        Thread printDuplicateThread = new Thread(runnable1,"PrintDuplicateThread");
+        printDuplicateThread.start();
+
+        Runnable runnable2 = ()->{
+            try{
+                Thread.sleep(20000);
+                System.out.println(Thread.currentThread().getName() + " thread started");
+                System.out.print("Average age: ");
+                animalsRepository.findAverageAge(animalsRepository.getAnimals());
+            }
+            catch(InterruptedException e){
+                System.out.println("Thread has been interrupted");
+            }
+            System.out.println(Thread.currentThread().getName() + " thread finished");
+        };
+        Thread findAverageAgeThread = new Thread(runnable2,"FindAverageAgeThread");
+        findAverageAgeThread.start();
+
+    }
 
     @Scheduled(fixedRateString = "${application.scheduler.timeRate}")
     public void doAllMethods() {
