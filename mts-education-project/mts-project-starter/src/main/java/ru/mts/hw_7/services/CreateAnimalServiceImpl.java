@@ -85,6 +85,7 @@ public class CreateAnimalServiceImpl implements CreateAnimalService {
     /**
      * @return Массив numOfAnimals случайных животных
      */
+    @Override
     public Map<String, List<AbstractAnimal>> createAnimals(int numOfAnimals) {
 
         if (numOfAnimals < 0) {
