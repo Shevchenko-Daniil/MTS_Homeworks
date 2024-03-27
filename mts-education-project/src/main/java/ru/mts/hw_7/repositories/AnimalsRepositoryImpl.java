@@ -124,7 +124,7 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
         return animals.stream()
                 .filter(expensiveAndOld)
                 .sorted((animal1, animal2) -> -animal1.getBirthDate().compareTo(animal2.getBirthDate()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
     }
 
     @Override
@@ -138,10 +138,10 @@ public class AnimalsRepositoryImpl implements AnimalsRepository {
                 .limit(3)
                 .map(AbstractAnimal::getName)
                 .sorted((name1, name2) -> -name1.compareTo(name2))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
     }
 
-    public CopyOnWriteArrayList<AbstractAnimal> getAnimals() {
+    public List<AbstractAnimal> getAnimals() {
         return animals;
     }
 
